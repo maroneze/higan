@@ -1,0 +1,8 @@
+*.o
+*.so
+*.a
+*.lib
+_build
+out/higan
+# symbolic link
+higan
