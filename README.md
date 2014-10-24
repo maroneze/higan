@@ -10,7 +10,7 @@ Main changes from v094
 
 * Added keyboard-based timing controls (run at 25%/50%/100%/200%)
     via F1/F2/F3/F4.
-    - Timing based on sound emulation (does not work if no sound)
+    - Timing based on sound emulation (does not work if no sound).
     - Only tested with Linux, mainly using ALSA 
         (but should work with PulseAudio).
 * Default profile: balanced (to test 200% speed).
@@ -40,7 +40,7 @@ Troubleshooting
 * If having ananke-related errors:
     - Cd to 'ananke' and run 'make'.
     - Ensure libananke.so is in a directory searched by ld,
-        e.g. by running 'LD_LIBRARY_PATH=/path/to/ananke <DESTDIR>/higan'
+        e.g. by running 'LD_LIBRARY_PATH=/path/to/ananke path/to/higan'
 * If file "ipl.rom" not found:
     - Ensure that 'make install' succeeded in copying all files.
     - Check sharedpath variable and permissions.
