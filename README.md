@@ -23,29 +23,33 @@ Compiling and running
     - accuracy
     - balanced
     - performance
-* (Optional) Change the DESTDIR and sharedpath variables in the Makefile.
+* (Optional) Change the DESTDIR variable in the Makefile.
     - DESTDIR is used to define destination of the 'install' target, 
         which is suffixed by '/usr/local'.
         +   If not specified, DESTDIR equals '/' in Linux.
-    - sharedpath is used to set up some installation files.
+* (Optional) Run ./configure --sharedpath=<path> to change the sharedpath
+    variable. It is used to set up some installation files.
         +   If not specified, sharedpath equals '/usr/share' in Linux.
 * Run 'make' to compile all files.
 * Run 'make install' (may require sudo).
-* Run 'higan' binary.
+* Run './higan.sh'.
 
 
 Troubleshooting
 ===============
 
-* If having ananke-related errors:
-    - Cd to 'ananke' and run 'make'.
+* If having ananke-related errors (i.e. cannot import games):
     - Ensure libananke.so is in a directory searched by ld,
-        e.g. by running 'LD_LIBRARY_PATH=/path/to/ananke path/to/higan'
+        e.g. by running 'LD_LIBRARY_PATH=/path/to/ananke path/to/higan'.
+        The higan.sh script already does this, but changing the value
+        of DESTDIR may require re-running 'make install'.
 * If file "ipl.rom" not found:
+    - Probable cause: higan could not find the profile folders where expected.
     - Ensure that 'make install' succeeded in copying all files.
     - Check sharedpath variable and permissions.
-        Note: if the value of sharedpath has changed *after* compiling the
-        sources, it is necessary to do 'make clean' and then 'make' again.
 * Weird timing issues at startup:
-    - Check that the settings.{bml,cfg} files in higan's config directory
-        include a valid 'Multiplier' entry.
+    - Check that settings.bml in higan's config directory
+        (i.e. usually ~/.config/higan in Linux)
+        includes a valid 'Multiplier' entry.
+    - Note: play speed settings are saved between sessions.
+        Reset it to 100% if necessary.

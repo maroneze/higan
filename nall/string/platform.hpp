@@ -57,8 +57,8 @@ string configpath() {
   return result;
 }
 
-#define _QUOTE(s) #s
-#define QUOTE(s) _QUOTE(s)
+// This definition may be modified by the 'configure' script.
+#define __SHAREDPATH__ "_build/usr/share"
 
 // /usr/share
 // /Library/Application Support/
@@ -69,13 +69,12 @@ string sharedpath() {
   SHGetFolderPathW(nullptr, CSIDL_COMMON_APPDATA | CSIDL_FLAG_CREATE, nullptr, 0, path);
   string result = (const char*)utf8_t(path);
   result.transform("\\", "/");
+  #elif defined(PLATFORM_MACOSX)
+  string result = "/Library/Application Support/";
   #else
-  #if !defined(SHAREDPATH)
-  #error SHAREDPATH variable not set
-  #else
-  string result = QUOTE(SHAREDPATH);
+  string result = "/usr/share/";
   #endif
-  #endif
+  result = __SHAREDPATH__;
   if(result.empty()) result = ".";
   if(result.endsWith("/") == false) result.append("/");
   return result;

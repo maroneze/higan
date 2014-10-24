@@ -88,7 +88,7 @@ endif
 resource:
 	sourcery $(ui)/resource/resource.bml $(ui)/resource/resource.cpp $(ui)/resource/resource.hpp
 
-install:
+install: install-ananke
 ifeq ($(platform),windows)
 else
 ifneq ($(platform),macosx)
@@ -100,8 +100,6 @@ endif
 	cp -R profile/* $(sharedpath)/$(name)
 	cp data/cheats.bml $(sharedpath)/$(name)/cheats.bml
 	chmod -R 777 $(sharedpath)/$(name)
-	rm -f ./$(name)
-	ln -s $(DESTDIR)$(prefix)/bin/$(name) ./
 endif
 
 uninstall:
@@ -109,5 +107,4 @@ ifeq ($(platform),windows)
 else ifeq ($(platform),macosx)
 else
 	rm $(DESTDIR)$(prefix)/bin/$(name)
-	rm $(name)
 endif

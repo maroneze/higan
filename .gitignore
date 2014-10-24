@@ -4,5 +4,4 @@
 *.lib
 _build
 out/higan
-# symbolic link
-higan
+shared.path

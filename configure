@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Simple replacement for a configure-like script.
+# It modifies the header file containing the
+# SHAREDPATH variable and also the shared.path
+# file containing its value for the Makefiles.
+
+if [ "$#" -lt 1 ];
+then
+  sed -i "s|^#define __SHAREDPATH__.*$|#define __SHAREDPATH__ result|" nall/string/platform.hpp
+  rm -f shared.path
+  echo "SHAREDPATH set to its default (system-dependent) value."
+  echo "To set a different value, run: ./configure --sharedpath=<path>"
+  echo "Run 'make clean' before recompiling."
+  exit 0
+elif [[ ! "$1" =~ "--sharedpath=" ]]
+then
+  echo "error: invalid option: $1"
+  echo "usage: ./configure [--sharedpath=<path>]"
+  exit 1
+fi
+IFS='=' read -ra SHAREDPATH <<< "$1"
+
+
+sed -i "s|^#define __SHAREDPATH__.*$|#define __SHAREDPATH__ \"${SHAREDPATH[1]}\"|" nall/string/platform.hpp
+echo "${SHAREDPATH[1]}" > shared.path
+echo "SHAREDPATH set to: ${SHAREDPATH[1]}"
+echo "Run 'make clean' before recompiling."

@@ -8,11 +8,6 @@ gba := gba
 profile := balanced
 target  := ethos
 
-# sharedpath defines where some common files will be installed.
-# Is it ignored when compiling to Windows.
-# Leave it empty to use higan's default values.
-sharedpath := _build/usr/share
-
 # DESTDIR is only used by the 'install' target.
 # Leave it empty to use Makefile's default values.
 DESTDIR := _build
@@ -21,15 +16,20 @@ DESTDIR := _build
 # prevents stripping of the final binary, and passes -DDEBUG to g++).
 #DEBUG := 1
 
+# sharedpath defines where some common files will be installed.
+# Is it ignored when compiling to Windows.
+# If file 'shared.path' exists, then its contents are the value
+# of sharedpath, otherwise it has system-dependent default values.
 ifeq ($(platform),windows)
   sharedpath := 
-else 
-  ifeq ($(platform),macosx)
-    ifeq ($(sharedpath),)
-      sharedpath := "/Library/Application\ Support"
-    endif
+else
+  ifneq ($(wildcard shared.path),)
+    sharedpath := $(patsubst "%",%,$(shell cat shared.path))
+    echo "sharedpath = $(sharedpath)"
   else
-    ifeq ($(sharedpath),)
+    ifeq ($(platform),macosx)
+      sharedpath := /Library/Application\ Support
+    else
       sharedpath := /usr/share
     endif
   endif
@@ -105,7 +105,10 @@ compile = \
 
 %.o: $<; $(call compile)
 
-all: build;
+all: build ananke/libananke.so;
+
+ananke/libananke.so:
+	cd ananke && make
 
 obj/libco.o: libco/libco.c libco/*
 
@@ -121,6 +124,7 @@ clean:
 	-@$(call delete,obj/*.dll)
 	-@$(call delete,*.res)
 	-@$(call delete,*.manifest)
+	-@$(call delete,ananke/libananke.so)
 
 archive:
 	if [ -f higan.tar.xz ]; then rm higan.tar.xz; fi
@@ -142,5 +146,13 @@ ifeq ($(shell id -un),byuu)
 	rm -r ruby/.test
 	rm -r phoenix/.test
 endif
+
+install-ananke:
+	mkdir -p $(DESTDIR)$(prefix)/lib
+	cp ananke/libananke.so $(DESTDIR)$(prefix)/lib/
+
+uninstall-ananke:
+	rm $(DESTDIR)$(prefix)/lib/libananke.so
+	
 
 help:;
