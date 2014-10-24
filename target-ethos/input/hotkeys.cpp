@@ -57,7 +57,7 @@ void InputManager::appendHotkeys() {
   
   {
     auto hotkey = new HotkeyInput;
-    hotkey->name    = "Play Speed 25%";
+    hotkey->name    = "Play Speed 25Percent";
     hotkey->mapping = "1/Button/F1";
 
     hotkey->press = [] {
@@ -68,7 +68,7 @@ void InputManager::appendHotkeys() {
   
   {
     auto hotkey = new HotkeyInput;
-    hotkey->name    = "Play Speed 50%";
+    hotkey->name    = "Play Speed 50Percent";
     hotkey->mapping = "1/Button/F2";
 
     hotkey->press = [] {
@@ -79,7 +79,7 @@ void InputManager::appendHotkeys() {
 
   {
     auto hotkey = new HotkeyInput;
-    hotkey->name    = "Play Speed 75%";
+    hotkey->name    = "Play Speed 75Percent";
     hotkey->mapping = "None";
 
     hotkey->press = [] {
@@ -90,7 +90,7 @@ void InputManager::appendHotkeys() {
   
   {
     auto hotkey = new HotkeyInput;
-    hotkey->name    = "Play Speed 100%";
+    hotkey->name    = "Play Speed 100Percent";
     hotkey->mapping = "1/Button/F3";
 
     hotkey->press = [] {
@@ -101,7 +101,7 @@ void InputManager::appendHotkeys() {
   
   {
     auto hotkey = new HotkeyInput;
-    hotkey->name    = "Play Speed 150%";
+    hotkey->name    = "Play Speed 150Percent";
     hotkey->mapping = "None";
 
     hotkey->press = [] {
@@ -112,7 +112,7 @@ void InputManager::appendHotkeys() {
   
   {
     auto hotkey = new HotkeyInput;
-    hotkey->name    = "Play Speed 200%";
+    hotkey->name    = "Play Speed 200Percent";
     hotkey->mapping = "1/Button/F4";
 
     hotkey->press = [] {
