@@ -100,6 +100,7 @@ endif
 	cp -R profile/* $(sharedpath)/$(name)
 	cp data/cheats.bml $(sharedpath)/$(name)/cheats.bml
 	chmod -R 777 $(sharedpath)/$(name)
+	rm -f ./$(name)
 	ln -s $(DESTDIR)$(prefix)/bin/$(name) ./
 endif
 

@@ -17,25 +17,41 @@ sharedpath := _build/usr/share
 # Leave it empty to use Makefile's default values.
 DESTDIR := _build
 
+# Uncomment when debugging (enables compilation with debugging symbols,
+# prevents stripping of the final binary, and passes -DDEBUG to g++).
+#DEBUG := 1
+
 ifeq ($(platform),windows)
   sharedpath := 
-else ifeq ($(platform),macosx)
-ifeq ($(sharedpath),)
-  sharedpath := "/Library/Application\ Support"
-endif
-else
-ifeq ($(sharedpath),)
-  sharedpath := /usr/share
-endif
+else 
+  ifeq ($(platform),macosx)
+    ifeq ($(sharedpath),)
+      sharedpath := "/Library/Application\ Support"
+    endif
+  else
+    ifeq ($(sharedpath),)
+      sharedpath := /usr/share
+    endif
+  endif
 endif
 
 # options += debugger
 # arch := x86
 # console := true
 
+# when debugging, add debugging flags, do not strip executable (-s),
+# and avoid optimizations (for faster compilation)
+ifneq ($(DEBUG),)
+  flags   += -g -ggdb -DDEBUG
+  link    += -g -ggdb
+else
+  flags   += -O3 -fomit-frame-pointer
+  link    += -s
+endif
+
 # compiler
-flags   += -I. -O3 -fomit-frame-pointer
-link    +=
+flags   += -I.
+link    += 
 objects := libco
 
 # profile-guided optimization mode
@@ -60,16 +76,16 @@ ifeq ($(platform),windows)
   else
     link += -mwindows
   endif
-  link += -s -mthreads -luuid -lkernel32 -luser32 -lgdi32 -lcomctl32 -lcomdlg32 -lshell32 -lole32 -lws2_32
+  link += -mthreads -luuid -lkernel32 -luser32 -lgdi32 -lcomctl32 -lcomdlg32 -lshell32 -lole32 -lws2_32
   link += -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
 else ifeq ($(platform),macosx)
   flags += -march=native
 else ifeq ($(platform),linux)
   flags += -march=native -DSHAREDPATH="$(sharedpath)"
-  link += -s -Wl,-export-dynamic -lX11 -lXext -ldl
+  link += -Wl,-export-dynamic -lX11 -lXext -ldl
 else ifeq ($(platform),bsd)
   flags += -march=native
-  link += -s -Wl,-export-dynamic -lX11 -lXext
+  link += -Wl,-export-dynamic -lX11 -lXext
 else
   $(error unsupported platform.)
 endif
