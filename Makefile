@@ -153,6 +153,5 @@ install-ananke:
 
 uninstall-ananke:
 	rm $(DESTDIR)$(prefix)/lib/libananke.so
-	
 
 help:;

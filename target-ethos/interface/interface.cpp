@@ -1,4 +1,7 @@
 #include "../ethos.hpp"
+
+#include "../../dev/input_recorder.cpp"
+
 Interface* interface = nullptr;
 
 void Interface::loadRequest(unsigned id, string name, string type) {
@@ -53,6 +56,33 @@ uint32_t Interface::videoColor(unsigned source, uint16_t a, uint16_t r, uint16_t
   return 0u;
 }
 
+typedef enum {
+  SFC_B = 0,
+  SFC_Y = 1,
+  SFC_SELECT = 2,
+  SFC_START = 3,
+  SFC_UP = 4,
+  SFC_DOWN = 5,
+  SFC_LEFT = 6,
+  SFC_RIGHT = 7,
+  SFC_A = 8,
+  SFC_X = 9,
+  SFC_L = 10,
+  SFC_R = 11
+} sfc_key;
+
+#define NUM_SFC_KEYS 12
+
+const string sfc_keys_utf8[NUM_SFC_KEYS] = {"B","Y","SEL","STA","↑","↓","←","→","A","X","L","R"};
+
+string key_info(bool pressed, sfc_key key, unsigned long frame) {
+  if (pressed) {
+    return {" ", sfc_keys_utf8[key], "(", frame, ")"};
+  } else {
+    return "";
+  }
+}
+
 void Interface::videoRefresh(const uint32_t* palette, const uint32_t* data, unsigned pitch, unsigned width, unsigned height) {
   uint32_t* output;
   unsigned outputPitch;
@@ -89,14 +119,43 @@ void Interface::videoRefresh(const uint32_t* palette, const uint32_t* data, unsi
 
   static unsigned frameCounter = 0;
   static time_t previous, current;
+  static unsigned fps;
+  // Note: curFrame is a counter only used to match emulator video frames
+  // to button presses, without any relation to the actual timing mechanism
+  // in the emulated consoles. In particular, the counter keeps its value
+  // after system resets.
+  static unsigned long curFrame;
   frameCounter++;
+  curFrame++;
 
   time(&current);
   if(current != previous) {
     previous = current;
-    utility->setStatusText({"FPS: ", frameCounter});
+    fps = frameCounter;
     frameCounter = 0;
   }
+  
+  unsigned port = 0; //TODO
+  unsigned id = 0; //TODO
+  bool keys[NUM_SFC_KEYS];
+  static unsigned long keys_pressed[NUM_SFC_KEYS];
+  for (int key = 0; key < NUM_SFC_KEYS; key++) {
+    keys[key] = interface->inputPoll(port, id,  key);
+    if (keys[key]) {
+      if (keys_pressed[key] == 0) {
+	keys_pressed[key] = curFrame;
+      }
+    } else {
+      keys_pressed[key] = 0;
+    }
+  }
+   
+  string currentInput = "";
+  for (int key = 0; key < NUM_SFC_KEYS; key++) {
+    currentInput.append(key_info(keys[key], (sfc_key)key, keys_pressed[key]));
+  }
+  utility->setStatusText({"FPS: ", fps, " - Frame: ", curFrame, " - ", currentInput});
+
 }
 
 void Interface::audioSample(int16_t lsample, int16_t rsample) {
@@ -109,8 +168,16 @@ void Interface::audioSample(int16_t lsample, int16_t rsample) {
 }
 
 int16_t Interface::inputPoll(unsigned port, unsigned device, unsigned input) {
-  unsigned guid = system().port[port].device[device].input[input].guid;
-  return inputManager->inputMap[guid]->poll();
+  auto dev = system().port[port].device[device];
+  if (auto in = inputRecorder.interfaceReplay(port, device, input)) {
+    // Returns {true, input} if input is being replayed by the input recorder
+    return in();
+  }
+  unsigned guid = dev.input[input].guid;
+  int16_t res = inputManager->inputMap[guid]->poll();
+  // records the input if so desired by the input recorder
+  inputRecorder.interfaceRecord(port, device, input, res);
+  return res;
 }
 
 void Interface::inputRumble(unsigned port, unsigned device, unsigned input, bool enable) {

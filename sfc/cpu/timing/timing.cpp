@@ -8,6 +8,7 @@ unsigned CPU::dma_counter() {
 }
 
 void CPU::add_clocks(unsigned clocks) {
+  inputRecorder.cpuAddClocks(clocks);
   status.irq_lock = false;
   unsigned ticks = clocks >> 1;
   while(ticks--) {
@@ -161,6 +162,9 @@ void CPU::timing_power() {
 }
 
 void CPU::timing_reset() {
+
+  inputRecorder.cpuReset();
+
   status.clock_count = 0;
   status.line_clocks = lineclocks();
 

@@ -1,5 +1,7 @@
 #include <sfc/sfc.hpp>
 
+#include "../../dev/input_recorder.hpp"
+
 #define CPU_CPP
 namespace SuperFamicom {
 

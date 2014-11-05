@@ -28,6 +28,8 @@ using namespace ruby;
 #include "tools/tools.hpp"
 #include "resource/resource.hpp"
 
+#include "../dev/input_recorder.hpp"
+
 Emulator::Interface& system();
 
 struct Program {

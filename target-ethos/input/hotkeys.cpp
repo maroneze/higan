@@ -120,7 +120,80 @@ void InputManager::appendHotkeys() {
       audio.set(Audio::Frequency, (unsigned)(::config->audio.frequency*::config->audio.multiplier));
     };
   }
-  
+
+  {
+    auto hotkey = new HotkeyInput;
+    hotkey->name    = "Play Speed 3Percent";
+    hotkey->mapping = "1/Button/U";
+
+    hotkey->press = [] {
+      ::config->audio.multiplier = 0.03125;
+      audio.set(Audio::Frequency, (unsigned)(::config->audio.frequency*::config->audio.multiplier));
+    };
+  }
+
+  {
+    auto hotkey = new HotkeyInput;
+    hotkey->name    = "Play Speed 6Percent";
+    hotkey->mapping = "1/Button/I";
+
+    hotkey->press = [] {
+      ::config->audio.multiplier = 0.0625;
+      audio.set(Audio::Frequency, (unsigned)(::config->audio.frequency*::config->audio.multiplier));
+    };
+  }
+
+  {
+    auto hotkey = new HotkeyInput;
+    hotkey->name    = "Play Speed 12Percent";
+    hotkey->mapping = "1/Button/O";
+
+    hotkey->press = [] {
+      ::config->audio.multiplier = 0.125;
+      audio.set(Audio::Frequency, (unsigned)(::config->audio.frequency*::config->audio.multiplier));
+    };
+  }
+
+  {
+    auto hotkey = new HotkeyInput;
+    hotkey->name    = "Toggle Record Input";
+    hotkey->mapping = "1/Button/R";
+
+    hotkey->press = [] {
+      inputRecorder.toggleRecord();
+    };
+  }
+
+  {
+    auto hotkey = new HotkeyInput;
+    hotkey->name    = "Replay Input Full";
+    hotkey->mapping = "1/Button/Y";
+
+    hotkey->press = [] {
+      inputRecorder.replay();
+    };
+  }
+
+  {
+    auto hotkey = new HotkeyInput;
+    hotkey->name    = "Toggle Record Macro";
+    hotkey->mapping = "1/Button/M";
+
+    hotkey->press = [] {
+      inputRecorder.toggleRecordMacro();
+    };
+  }
+
+  {
+    auto hotkey = new HotkeyInput;
+    hotkey->name    = "Replay Macro";
+    hotkey->mapping = "1/Button/K";
+
+    hotkey->press = [] {
+      inputRecorder.replayMacro();
+    };
+  }
+
   {
     auto hotkey = new HotkeyInput;
     hotkey->name    = "Power Cycle";

@@ -8,6 +8,8 @@ include sfc/Makefile
 include gb/Makefile
 include gba/Makefile
 
+include dev/Makefile
+
 ui_objects := ui-ethos ui-configuration ui-interface ui-utility
 ui_objects += ui-input ui-window ui-general ui-settings ui-tools
 ui_objects += phoenix ruby
@@ -46,7 +48,7 @@ objects := $(patsubst %,obj/%.o,$(objects))
 
 obj/ui-ethos.o: $(ui)/ethos.cpp $(call rwildcard,$(ui)/)
 obj/ui-configuration.o: $(ui)/configuration/configuration.cpp $(call rwildcard,$(ui)/)
-obj/ui-interface.o: $(ui)/interface/interface.cpp $(call rwildcard,$(ui)/)
+obj/ui-interface.o: $(ui)/interface/interface.cpp dev/input_recorder.cpp $(call rwildcard,$(ui)/)
 obj/ui-utility.o: $(ui)/utility/utility.cpp $(call rwildcard,$(ui)/)
 obj/ui-input.o: $(ui)/input/input.cpp $(call rwildcard,$(ui)/)
 obj/ui-window.o: $(ui)/window/window.cpp $(call rwildcard,$(ui)/)
