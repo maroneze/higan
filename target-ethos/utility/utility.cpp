@@ -85,6 +85,12 @@ void Utility::reset() {
   system().reset();
 }
 
+void Utility::resetAndReplay() {
+  if(program->active == nullptr) return;
+  system().reset();
+  inputRecorder.replay();
+}
+
 void Utility::load() {
   presentation->setTitle(system().title());
 

@@ -99,7 +99,7 @@ void System::load() {
 
   interface->loadRequest(ID::IPLROM, document["system/smp/rom/name"].data);
   if(!file::exists({interface->path(ID::System), document["system/smp/rom/name"].data})) {
-    interface->notify("Error: required Super Famicom firmware ipl.rom not found\nExpected path: ", interface->path(ID::System));
+    interface->notify("Error: required Super Famicom firmware ipl.rom not found\nFile should be accessible from PWD or from its expected path: ", interface->path(ID::System));
   }
 
   region = configuration.region;
@@ -139,7 +139,9 @@ void System::load() {
   if(cartridge.has_bs_slot()) satellaviewcartridge.load();
   if(cartridge.has_st_slots()) sufamiturboA.load(), sufamiturboB.load();
 
-  serialize_init();
+  // Note: pre-computing the size of the data structure has been disabled
+  //  due to the input recorder.
+  //serialize_init();
 }
 
 void System::unload() {

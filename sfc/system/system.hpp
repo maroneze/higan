@@ -22,7 +22,7 @@ struct System : property<System> {
   readonly<ExpansionPortDevice> expansion;
   readonly<unsigned> cpu_frequency;
   readonly<unsigned> apu_frequency;
-  readonly<unsigned> serialize_size;
+  //readonly<unsigned> serialize_size;
 
   serializer serialize();
   bool unserialize(serializer&);
@@ -34,7 +34,11 @@ private:
 
   void serialize(serializer&);
   void serialize_all(serializer&);
-  void serialize_init();
+  unsigned serialize_size();
+  //Note: the input recorder serializes dynamically-sized data structures,
+  // therefore serialize_init() cannot be used to statically pre-compute
+  // the size of the serialized data.
+  //void serialize_init();
 
   friend class Cartridge;
   friend class Video;

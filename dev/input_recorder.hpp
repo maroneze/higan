@@ -1,10 +1,10 @@
-typedef enum { IR_REC, IR_REPLAY_FULL, IR_REPLAY_MACRO, IR_OFF } status_t;
-
-// TODO: see how to make it serializable (sfc does not know Configuration::Document)
+// Recorder status
+#define IR_OFF 0
+#define IR_REPLAY_FULL 1
+#define IR_REPLAY_MACRO 2
+#define IR_REC 3
 
 struct InputRecorder {
-  status_t status;
-  long unsigned cpuTimer;
 
   struct Pulse {
     unsigned long time;
@@ -26,13 +26,17 @@ struct InputRecorder {
   };
 
   struct InputData {
+  // A typedef for 'status' could be useful,
+  // but for serialization an int is simpler
+    unsigned status;
+    unsigned long cpuTimer;
     unsigned long deltaTimer;
     unsigned long deltaReplayTimer;
     unsigned recordedCount;
     unsigned replayedCount;
     vector<RDevice> rport;
   };
-
+  
   InputData recInputs;
 
   // sfc/cpu/timing/timing.cpp
@@ -48,6 +52,10 @@ struct InputRecorder {
   void toggleRecordMacro();
   void replay();
   void replayMacro();
+
+  void serialize(serializer& s);
+  string statusString();
+  string debugStatusString();
 
 private:
   void resetRecords(unsigned long recordTimerStart);

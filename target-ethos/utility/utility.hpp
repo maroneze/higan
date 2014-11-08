@@ -11,6 +11,7 @@ struct Utility {
   void connect(unsigned port, unsigned device);
   void power();
   void reset();
+  void resetAndReplay();
   void load();
   void unload();
 

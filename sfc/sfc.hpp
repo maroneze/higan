@@ -9,6 +9,8 @@
 #include <processor/spc700/spc700.hpp>
 #include <processor/upd96050/upd96050.hpp>
 
+#include "../dev/input_recorder.hpp"
+
 namespace SuperFamicom {
   namespace Info {
     static const char Name[] = "bsnes";

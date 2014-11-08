@@ -5,7 +5,7 @@ sfc := sfc
 gb  := gb
 gba := gba
 
-profile := balanced
+profile := accuracy
 target  := ethos
 
 # DESTDIR is only used by the 'install' target.

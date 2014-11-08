@@ -113,6 +113,7 @@ void CPU::serialize(serializer& s) {
   s.integer(pipe.valid);
   s.integer(pipe.addr);
   s.integer(pipe.data);
+
 }
 
 #endif

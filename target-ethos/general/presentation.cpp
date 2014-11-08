@@ -189,6 +189,7 @@ void Presentation::bootstrap() {
     iEmulator->menu.setText(emulator->information.name);
     iEmulator->power.setText("Power");
     iEmulator->reset.setText("Reset");
+    iEmulator->resetAndReplay.setText("Reset and Replay");
     iEmulator->unload.setText("Unload");
 
     for(auto& port : emulator->port) {
@@ -210,6 +211,7 @@ void Presentation::bootstrap() {
     iEmulator->menu.append(iEmulator->power);
     if(emulator->information.resettable)
     iEmulator->menu.append(iEmulator->reset);
+    iEmulator->menu.append(iEmulator->resetAndReplay);
     iEmulator->menu.append(*new Separator);
     unsigned visiblePorts = 0;
     for(auto& iPort : iEmulator->port) {
@@ -226,6 +228,7 @@ void Presentation::bootstrap() {
 
     iEmulator->power.onActivate = {&Utility::power, utility};
     iEmulator->reset.onActivate = {&Utility::reset, utility};
+    iEmulator->resetAndReplay.onActivate = {&Utility::resetAndReplay, utility};
     iEmulator->unload.onActivate = {&Utility::unload, utility};
 
     emulatorList.append(iEmulator);

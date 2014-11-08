@@ -154,7 +154,7 @@ void Interface::videoRefresh(const uint32_t* palette, const uint32_t* data, unsi
   for (int key = 0; key < NUM_SFC_KEYS; key++) {
     currentInput.append(key_info(keys[key], (sfc_key)key, keys_pressed[key]));
   }
-  utility->setStatusText({"FPS: ", fps, " - Frame: ", curFrame, " - ", currentInput});
+  utility->setStatusText({"FPS: ", fps, " - Frame: ", curFrame, " - ", inputRecorder.statusString(), " - ", currentInput});
 
 }
 
