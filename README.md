@@ -56,8 +56,15 @@ Compiling and running
     variable. It is used to set up some installation files.
         +   If not specified, sharedpath equals '/usr/share' in Linux.
 * Run 'make' to compile all files.
+    - Reminder: (at least) the following libraries are required on a Ubuntu-ish
+        system to compile higan: 
+        libgtk2.0-dev libgl1-mesa-dev xorg-dev libsdl1.2-dev libao-dev libopenal-dev libudev-dev
 * Run 'make install' (may require sudo).
 * Run './higan.sh'.
+
+Note: do `make clean` after changing the profile to ensure required files 
+  are recompiled. Tt may also be necessary to do `make clean` after modifying 
+  .hpp files, since they are not always listed as dependencies in the Makefile.
 
 
 Troubleshooting
